@@ -7,6 +7,7 @@ fun PlaceDto.toPlaceEntity() = PlaceEntity(
     name = full_name,
     address = address,
     likes = like_count,
-    imageUrl = images?.getOrNull(0)?.image?.card?.url
+    imageUrl = images?.getOrNull(0)?.image?.card?.url,
+    isFavorite = is_liked != null && is_liked
 )
 

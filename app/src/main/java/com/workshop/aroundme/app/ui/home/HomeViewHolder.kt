@@ -14,9 +14,10 @@ class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val likesTextView = itemView.findViewById<TextView>(R.id.likes)
     private val likesContainer = itemView.findViewById<View>(R.id.likesContainer)
     private val image = itemView.findViewById<ImageView>(R.id.image)
+    private val favorite = itemView.findViewById<ImageView>(R.id.favorite)
 
     fun bind(placeEntity: PlaceEntity) {
-        nameTextView.text = placeEntity.name
+        nameTextView.text = placeEntity.name + "${placeEntity.isFavorite}"
         addressTextView.text = placeEntity.address
         likesTextView.text = placeEntity.likes.toString()
 
@@ -26,6 +27,22 @@ class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             View.VISIBLE
         } else {
             View.GONE
+        }
+
+        if (placeEntity.isFavorite) {
+            favorite.setImageResource(R.drawable.ic_star_on)
+        } else {
+            favorite.setImageResource(R.drawable.ic_star_off)
+        }
+
+        favorite.setOnClickListener {
+            if (!placeEntity.isFavorite) {
+                favorite.setImageResource(R.drawable.ic_star_on)
+                placeEntity.isFavorite = true
+            } else {
+                favorite.setImageResource(R.drawable.ic_star_off)
+                placeEntity.isFavorite = false
+            }
         }
     }
 }

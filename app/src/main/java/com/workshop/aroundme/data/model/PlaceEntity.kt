@@ -4,5 +4,6 @@ data class PlaceEntity(
     val name: String?,
     val address: String?,
     val likes: Int?,
-    val imageUrl: String?
+    val imageUrl: String?,
+    var isFavorite: Boolean
 )
