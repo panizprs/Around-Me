@@ -8,7 +8,7 @@ class PlaceRepository(private val placeDataSource: PlaceDataSource) {
     fun getFeaturedPlaces(success: (List<PlaceEntity>?) -> Unit) {
         Thread {
             val result = placeDataSource.getFeaturedPlaces()?.map {
-                PlaceEntity(it.full_name)
+                PlaceEntity(it.full_name, it.address, it.like_count, it.images?.getOrNull(0)?.image?.card?.url)
             }
             success(result)
         }.start()
