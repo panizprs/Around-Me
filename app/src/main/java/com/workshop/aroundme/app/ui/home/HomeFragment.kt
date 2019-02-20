@@ -13,7 +13,7 @@ import com.workshop.aroundme.R
 import com.workshop.aroundme.data.PlaceRepository
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.remote.NetworkManager
-import com.workshop.aroundme.remote.datasource.PlaceDataSource
+import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
 import com.workshop.aroundme.remote.service.PlaceService
 
 class HomeFragment : Fragment() {
@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val placeRepository = PlaceRepository(PlaceDataSource(PlaceService(NetworkManager())))
+        val placeRepository = PlaceRepository(PlaceRemoteDataSource(PlaceService(NetworkManager())))
         placeRepository.getFeaturedPlaces(::onFeaturedPlacesReady)
     }
 
