@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.home.HomeFragment
+import com.workshop.aroundme.data.model.UserEntity
 
 class LoginFragment : Fragment() {
 
@@ -37,7 +38,8 @@ class LoginFragment : Fragment() {
             ) {
 
                 val userRepository = Injector.provideUserRepository(view.context)
-                userRepository.login()
+                val user = UserEntity(usernameEditText.text.toString())
+                userRepository.login(user)
 
                 fragmentManager?.beginTransaction()
                     ?.replace(R.id.content_frame, HomeFragment())

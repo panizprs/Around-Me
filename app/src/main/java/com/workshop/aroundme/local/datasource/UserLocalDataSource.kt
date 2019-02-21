@@ -1,21 +1,27 @@
 package com.workshop.aroundme.local.datasource
 
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.workshop.aroundme.data.model.UserEntity
 
 class UserLocalDataSource(private val sharedPreferences: SharedPreferences) {
 
-    fun login() {
-        sharedPreferences.edit().putBoolean(KEY_IS_LOGGED_IN, true).commit()
+    fun login(user: UserEntity) {
+        val userData = Gson().toJson(user, UserEntity::class.java)
+        sharedPreferences.edit().putString(KEY_USER, userData).commit()
     }
 
     fun logout() {
-        sharedPreferences.edit().remove(KEY_IS_LOGGED_IN).commit()
+        sharedPreferences.edit().remove(KEY_USER).commit()
     }
 
-    fun isLoggedIn() = sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
+    fun getUser(): UserEntity? {
+        val userData = sharedPreferences.getString(KEY_USER, null)
+        return Gson().fromJson(userData, UserEntity::class.java)
+    }
 
 
     companion object {
-        const val KEY_IS_LOGGED_IN = "is_logged_in"
+        const val KEY_USER = "user"
     }
 }
