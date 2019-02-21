@@ -1,11 +1,14 @@
 package com.workshop.aroundme.app
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.ui.home.HomeFragment
+import com.workshop.aroundme.app.ui.login.LoginFragment
+import com.workshop.aroundme.app.ui.login.LoginFragment.Companion.KEY_IS_LOGGED_IN
 import com.workshop.aroundme.app.ui.starred.StarredFragment
 
 class MainActivity : AppCompatActivity() {
@@ -14,9 +17,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.content_frame, HomeFragment())
-            .commit()
+        val isLoggedIn = getSharedPreferences("user.data", Context.MODE_PRIVATE)
+            .getBoolean(KEY_IS_LOGGED_IN, false)
+
+        if (isLoggedIn) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, HomeFragment())
+                .commit()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, LoginFragment())
+                .commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
