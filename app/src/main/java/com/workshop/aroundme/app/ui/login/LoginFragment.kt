@@ -3,7 +3,6 @@ package com.workshop.aroundme.app.ui.login
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.workshop.aroundme.R
+import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.home.HomeFragment
 
 class LoginFragment : Fragment() {
@@ -36,11 +36,8 @@ class LoginFragment : Fragment() {
                 && passwordEditText.text.isNotEmpty() && passwordEditText.text.toString() == "1234"
             ) {
 
-                val sharedPreferences = context?.getSharedPreferences("user.data", Context.MODE_PRIVATE)
-                sharedPreferences
-                    ?.edit()
-                    ?.putBoolean(KEY_IS_LOGGED_IN, true)
-                    ?.commit()
+                val userRepository = Injector.provideUserRepository(view.context)
+                userRepository.login()
 
                 fragmentManager?.beginTransaction()
                     ?.replace(R.id.content_frame, HomeFragment())
@@ -59,7 +56,4 @@ class LoginFragment : Fragment() {
         }
     }
 
-    companion object {
-        const val KEY_IS_LOGGED_IN = "is_logged_in"
-    }
 }

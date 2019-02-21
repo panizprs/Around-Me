@@ -1,6 +1,5 @@
 package com.workshop.aroundme.app
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.ui.home.HomeFragment
 import com.workshop.aroundme.app.ui.login.LoginFragment
-import com.workshop.aroundme.app.ui.login.LoginFragment.Companion.KEY_IS_LOGGED_IN
 import com.workshop.aroundme.app.ui.starred.StarredFragment
 
 class MainActivity : AppCompatActivity() {
@@ -17,10 +15,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val isLoggedIn = getSharedPreferences("user.data", Context.MODE_PRIVATE)
-            .getBoolean(KEY_IS_LOGGED_IN, false)
-
-        if (isLoggedIn) {
+        val userRepository = Injector.provideUserRepository(this)
+        if (userRepository.isLoggedIn()) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.content_frame, HomeFragment())
                 .commit()
