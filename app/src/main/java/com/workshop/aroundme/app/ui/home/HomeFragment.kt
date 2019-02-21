@@ -10,13 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
-import com.workshop.aroundme.data.PlaceRepository
+import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.data.model.PlaceEntity
-import com.workshop.aroundme.remote.NetworkManager
-import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
-import com.workshop.aroundme.remote.service.PlaceService
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +35,7 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val placeRepository = PlaceRepository(PlaceRemoteDataSource(PlaceService(NetworkManager())))
+        val placeRepository = Injector.providePlaceRepository(requireContext())
         placeRepository.getFeaturedPlaces(::onFeaturedPlacesReady)
     }
 
@@ -48,7 +45,12 @@ class HomeFragment : Fragment() {
             val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
             val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
             progressBar?.visibility = View.GONE
-            recyclerView?.adapter = HomeAdapter(list ?: listOf())
+            recyclerView?.adapter = HomeAdapter(list ?: listOf(), this)
         }
+    }
+
+    override fun onItemStarred(placeEntity: PlaceEntity) {
+        val placeRepository = Injector.providePlaceRepository(requireContext())
+        placeRepository.starPlace(placeEntity)
     }
 }

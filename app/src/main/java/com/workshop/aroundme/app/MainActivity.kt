@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.ui.home.HomeFragment
+import com.workshop.aroundme.app.ui.starred.StarredFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.content_frame, HomeFragment())
+            .replace(R.id.content_frame, StarredFragment())
             .commit()
     }
 }

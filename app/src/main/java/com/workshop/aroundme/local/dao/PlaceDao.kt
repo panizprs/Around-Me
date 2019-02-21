@@ -6,6 +6,9 @@ import com.workshop.aroundme.local.model.LocalPlace
 @Dao
 interface PlaceDao {
 
+    @Query("SELECT * FROM place WHERE isStarred = 1")
+    fun listStarredPlaces(): List<LocalPlace>
+
     @Query("SELECT * FROM place")
     fun listAll(): List<LocalPlace>
 

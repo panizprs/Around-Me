@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
+import com.workshop.aroundme.app.Injector
 
 class StarredFragment : Fragment() {
 
@@ -21,6 +22,12 @@ class StarredFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        //TODO adapter
+        val repository = Injector.providePlaceRepository(view.context)
+
+        repository.getStarredPlaces { places ->
+            activity?.runOnUiThread {
+                recyclerView.adapter = StarredAdapter(places)
+            }
+        }
     }
 }
