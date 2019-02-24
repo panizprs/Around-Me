@@ -20,7 +20,7 @@ class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         placeEntity: PlaceEntity,
         onHomePlaceItemClickListener: OnHomePlaceItemClickListener
     ) {
-        nameTextView.text = placeEntity.name + "${placeEntity.isFavorite}"
+        nameTextView.text = placeEntity.name
         addressTextView.text = placeEntity.address
         likesTextView.text = placeEntity.likes.toString()
 
@@ -36,6 +36,10 @@ class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             favorite.setImageResource(R.drawable.ic_star_on)
         } else {
             favorite.setImageResource(R.drawable.ic_star_off)
+        }
+
+        itemView.setOnClickListener {
+            onHomePlaceItemClickListener.onPlaceItemCliced(placeEntity)
         }
 
         favorite.setOnClickListener {

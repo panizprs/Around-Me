@@ -2,7 +2,9 @@ package com.workshop.aroundme.data
 
 import androidx.annotation.WorkerThread
 import com.workshop.aroundme.data.mapper.toLocalPlace
+import com.workshop.aroundme.data.mapper.toPlaceDetailEntity
 import com.workshop.aroundme.data.mapper.toPlaceEntity
+import com.workshop.aroundme.data.model.PlaceDetailEntity
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
 import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
@@ -20,6 +22,13 @@ class PlaceRepository(
             }
             success(result)
         }.start()
+    }
+
+    fun getPlaceDetail(slug: String, success: (PlaceDetailEntity?) -> Unit) {
+        thread {
+            val entity = placeRemoteDataSource.getPlaceDetail(slug)?.toPlaceDetailEntity()
+            success(entity)
+        }
     }
 
     @WorkerThread

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
+import com.workshop.aroundme.app.ui.detail.DetailFragment
 import com.workshop.aroundme.data.model.PlaceEntity
 
 class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
@@ -47,6 +48,13 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
             progressBar?.visibility = View.GONE
             recyclerView?.adapter = HomeAdapter(list ?: listOf(), this)
         }
+    }
+
+    override fun onPlaceItemCliced(placeEntity: PlaceEntity) {
+        fragmentManager?.beginTransaction()
+            ?.replace(R.id.content_frame, DetailFragment.newInstance(placeEntity.slug))
+            ?.addToBackStack(null)
+            ?.commit()
     }
 
     override fun onItemStarred(placeEntity: PlaceEntity) {

@@ -6,5 +6,6 @@ data class PlaceEntity(
     val address: String?,
     val likes: Int?,
     val imageUrl: String?,
-    var isFavorite: Boolean
+    var isFavorite: Boolean,
+    val slug: String?
 )
