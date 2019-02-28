@@ -17,11 +17,9 @@ import com.workshop.aroundme.data.model.PlaceEntity
 
 class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    private var adapter: ModernHomeAdapter? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
@@ -31,7 +29,6 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -39,9 +36,6 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
 
         val placeRepository = Injector.providePlaceRepository(requireContext())
         placeRepository.getFeaturedPlaces(::onFeaturedPlacesReady)
-
-        val categoryRepository = Injector.provideCategoryRepository()
-        categoryRepository.getCategories(::onCategoriesReady)
     }
 
     private fun onFeaturedPlacesReady(list: List<PlaceEntity>?) {
@@ -50,13 +44,18 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
             val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
             val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
             progressBar?.visibility = View.GONE
-            recyclerView?.adapter = HomeAdapter(list ?: listOf(), this)
+
+            adapter = ModernHomeAdapter(list ?: listOf(), this)
+            recyclerView?.adapter = adapter
+
+            val categoryRepository = Injector.provideCategoryRepository()
+            categoryRepository.getCategories(::onCategoriesReady)
         }
     }
 
     private fun onCategoriesReady(list: List<ParentCategoryEntity>?) {
         activity?.runOnUiThread {
-            println(list)
+            adapter?.parentCategories = list.orEmpty()
         }
     }
 
