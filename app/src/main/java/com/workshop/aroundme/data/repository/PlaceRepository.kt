@@ -1,4 +1,4 @@
-package com.workshop.aroundme.data
+package com.workshop.aroundme.data.repository
 
 import androidx.annotation.WorkerThread
 import com.workshop.aroundme.data.mapper.toLocalPlace

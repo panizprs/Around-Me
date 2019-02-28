@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
+import com.workshop.aroundme.data.model.ParentCategoryEntity
 import com.workshop.aroundme.data.model.PlaceEntity
 
 class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
@@ -38,6 +39,9 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
 
         val placeRepository = Injector.providePlaceRepository(requireContext())
         placeRepository.getFeaturedPlaces(::onFeaturedPlacesReady)
+
+        val categoryRepository = Injector.provideCategoryRepository()
+        categoryRepository.getCategories(::onCategoriesReady)
     }
 
     private fun onFeaturedPlacesReady(list: List<PlaceEntity>?) {
@@ -47,6 +51,12 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener {
             val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
             progressBar?.visibility = View.GONE
             recyclerView?.adapter = HomeAdapter(list ?: listOf(), this)
+        }
+    }
+
+    private fun onCategoriesReady(list: List<ParentCategoryEntity>?) {
+        activity?.runOnUiThread {
+            println(list)
         }
     }
 

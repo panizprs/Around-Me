@@ -3,19 +3,26 @@ package com.workshop.aroundme.app
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.workshop.aroundme.data.PlaceRepository
-import com.workshop.aroundme.data.UserRepository
+import com.workshop.aroundme.data.repository.CategoryRepository
+import com.workshop.aroundme.data.repository.PlaceRepository
+import com.workshop.aroundme.data.repository.UserRepository
 import com.workshop.aroundme.local.AppDatabase
 import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
 import com.workshop.aroundme.local.datasource.UserLocalDataSource
 import com.workshop.aroundme.remote.NetworkManager
+import com.workshop.aroundme.remote.datasource.CategoryRemoteDataSource
 import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
+import com.workshop.aroundme.remote.service.CategoryService
 import com.workshop.aroundme.remote.service.PlaceService
 
 object Injector {
 
     private fun provideAppDatabase(context: Context): AppDatabase {
         return Room.databaseBuilder(context, AppDatabase::class.java, "db.data").build()
+    }
+
+    fun provideCategoryRepository(): CategoryRepository {
+        return CategoryRepository(CategoryRemoteDataSource(CategoryService(NetworkManager())))
     }
 
     fun providePlaceRepository(context: Context): PlaceRepository {

@@ -1,8 +1,10 @@
 package com.workshop.aroundme.data.mapper
 
+import com.workshop.aroundme.data.model.CategoryEntity
 import com.workshop.aroundme.data.model.PlaceDetailEntity
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.local.model.LocalPlace
+import com.workshop.aroundme.remote.model.response.CategoryDto
 import com.workshop.aroundme.remote.model.response.DetailResponseDto
 import com.workshop.aroundme.remote.model.response.PlaceDto
 
@@ -41,5 +43,11 @@ fun DetailResponseDto.toPlaceDetailEntity() = PlaceDetailEntity(
     location = latlng,
     tags = tags?.joinToString(separator = " ،") { tag -> tag?.name.toString() }
 
+)
+
+fun CategoryDto.toCategoryEntity() = CategoryEntity(
+    id = id,
+    name = name,
+    icon = icon
 )
 

@@ -1,4 +1,4 @@
-package com.workshop.aroundme.data
+package com.workshop.aroundme.data.repository
 
 import com.workshop.aroundme.data.model.UserEntity
 import com.workshop.aroundme.local.datasource.UserLocalDataSource
