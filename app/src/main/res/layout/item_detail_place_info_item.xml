@@ -8,8 +8,7 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/PlaceTitle.MyRed"
         android:layout_marginTop="8dp"
         tools:text="عنوان محل" />
 
