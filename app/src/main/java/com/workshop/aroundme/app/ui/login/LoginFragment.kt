@@ -1,6 +1,5 @@
 package com.workshop.aroundme.app.ui.login
 
-
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -13,9 +12,18 @@ import androidx.fragment.app.Fragment
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.home.HomeFragment
-import com.workshop.aroundme.data.model.UserEntity
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), LoginContract.View {
+
+    private lateinit var usernameEditText: EditText
+
+    private lateinit var passwordEditText: EditText
+
+    private val presenter: LoginContract.Presenter by lazy {
+        LoginPresenter(Injector.provideUserRepository(requireContext())).apply {
+            view = this@LoginFragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,37 +33,39 @@ class LoginFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
-    @SuppressLint("ApplySharedPref")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val usernameEditText = view.findViewById<EditText>(R.id.username)
-        val passwordEditText = view.findViewById<EditText>(R.id.password)
+        usernameEditText = view.findViewById(R.id.username)
+        passwordEditText = view.findViewById(R.id.password)
         view.findViewById<View>(R.id.login).setOnClickListener {
-
-            if (usernameEditText.text.isNotEmpty() && usernameEditText.text.toString() == "reza"
-                && passwordEditText.text.isNotEmpty() && passwordEditText.text.toString() == "1234"
-            ) {
-
-                val userRepository = Injector.provideUserRepository(view.context)
-                val user = UserEntity(usernameEditText.text.toString())
-                userRepository.login(user)
-
-                fragmentManager?.beginTransaction()
-                    ?.replace(R.id.content_frame, HomeFragment())
-                    ?.commit()
-            } else {
-                AlertDialog.Builder(view.context)
-                    .setTitle(getString(R.string.error))
-                    .setMessage(getString(R.string.invalid_user_or_pass))
-                    .setPositiveButton(getString(R.string.ok)) { dialogInterface: DialogInterface, i: Int ->
-                        dialogInterface.dismiss()
-                    }
-                    .create()
-                    .show()
-
-            }
+            presenter.onLoginButtonClicked()
         }
+    }
+
+    override fun getUsernameValue(): String {
+        return usernameEditText.text.toString()
+    }
+
+    override fun getPasswordValue(): String {
+        return passwordEditText.text.toString()
+    }
+
+    override fun showHomeFragment() {
+        fragmentManager?.beginTransaction()
+            ?.replace(R.id.content_frame, HomeFragment())
+            ?.commit()
+    }
+
+    override fun showMessageToUser(message: Int, title: Int) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(getString(R.string.ok)) { dialogInterface: DialogInterface, i: Int ->
+                dialogInterface.dismiss()
+            }
+            .create()
+            .show()
     }
 
 }
