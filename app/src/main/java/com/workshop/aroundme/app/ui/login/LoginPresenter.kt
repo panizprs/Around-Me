@@ -4,9 +4,10 @@ import com.workshop.aroundme.R
 import com.workshop.aroundme.data.model.UserEntity
 import com.workshop.aroundme.data.repository.UserRepository
 
-class LoginPresenter(private val userRepository: UserRepository) : LoginContract.Presenter {
-
-    lateinit var view: LoginContract.View
+class LoginPresenter(
+    private val view: LoginContract.View,
+    private val userRepository: UserRepository
+) : LoginContract.Presenter {
 
     override fun onLoginButtonClicked() {
         val userName = view.getUsernameValue()

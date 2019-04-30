@@ -19,11 +19,7 @@ class LoginFragment : Fragment(), LoginContract.View {
 
     private lateinit var passwordEditText: EditText
 
-    private val presenter: LoginContract.Presenter by lazy {
-        LoginPresenter(Injector.provideUserRepository(requireContext())).apply {
-            view = this@LoginFragment
-        }
-    }
+    private lateinit var presenter: LoginContract.Presenter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +31,8 @@ class LoginFragment : Fragment(), LoginContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        presenter = LoginPresenter(this, Injector.provideUserRepository(requireContext()))
 
         usernameEditText = view.findViewById(R.id.username)
         passwordEditText = view.findViewById(R.id.password)
