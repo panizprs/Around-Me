@@ -8,6 +8,8 @@ import com.workshop.aroundme.data.model.PlaceDetailEntity
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
 import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
+import io.reactivex.Completable
+import io.reactivex.Single
 import kotlin.concurrent.thread
 
 class PlaceRepository(
@@ -15,13 +17,12 @@ class PlaceRepository(
     private val placeRemoteDataSource: PlaceRemoteDataSource
 ) {
 
-    fun getFeaturedPlaces(success: (List<PlaceEntity>?) -> Unit) {
-        Thread {
-            val result = placeRemoteDataSource.getFeaturedPlaces()?.map { placeDto ->
+    fun getFeaturedPlaces(): Single<List<PlaceEntity>> {
+        return Single.fromCallable {
+            placeRemoteDataSource.getFeaturedPlaces()?.map { placeDto ->
                 placeDto.toPlaceEntity()
             }
-            success(result)
-        }.start()
+        }
     }
 
     fun getPlaceDetail(slug: String, success: (PlaceDetailEntity?) -> Unit) {
@@ -42,8 +43,8 @@ class PlaceRepository(
     }
 
     @WorkerThread
-    fun starPlace(placeEntity: PlaceEntity) {
-        thread {
+    fun starPlace(placeEntity: PlaceEntity): Completable {
+        return Completable.fromCallable {
             placeLocalDataSource.starPlace(placeEntity.toLocalPlace())
         }
     }

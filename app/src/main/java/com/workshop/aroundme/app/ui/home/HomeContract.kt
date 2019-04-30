@@ -19,6 +19,8 @@ interface HomeContract {
 
         fun onItemStarred(placeEntity: PlaceEntity)
 
+        fun onDestroyView()
+
     }
 
 }

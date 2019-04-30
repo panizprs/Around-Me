@@ -3,25 +3,51 @@ package com.workshop.aroundme.app.ui.home
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.data.repository.CategoryRepository
 import com.workshop.aroundme.data.repository.PlaceRepository
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
+import java.lang.ref.WeakReference
 
 class HomePresenter(
     private val placeRepository: PlaceRepository,
     private val categoryRepository: CategoryRepository
 ) : HomeContract.Presenter {
 
-    lateinit var view: HomeContract.View
+    lateinit var view: WeakReference<HomeContract.View>
+
+    private var compositeDisposable = CompositeDisposable()
 
     override fun onActivityCreated() {
-        placeRepository.getFeaturedPlaces { featuredPlaces ->
-            view.showPlaces(featuredPlaces ?: emptyList())
-            categoryRepository.getCategories {
-                view.showCategories(it ?: emptyList())
+        placeRepository.getFeaturedPlaces()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess {
+                view.get()?.showPlaces(it ?: emptyList())
             }
-        }
+            .observeOn(Schedulers.io())
+            .flatMap {
+                categoryRepository.getCategories()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                view.get()?.showCategories(it ?: emptyList())
+            }, {
+
+            })
+            .addTo(compositeDisposable)
     }
 
     override fun onItemStarred(placeEntity: PlaceEntity) {
         placeRepository.starPlace(placeEntity)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+            .addTo(compositeDisposable)
+    }
+
+    override fun onDestroyView() {
+        compositeDisposable.dispose()
     }
 
 }

@@ -13,6 +13,7 @@ import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
 import com.workshop.aroundme.data.model.ParentCategoryEntity
 import com.workshop.aroundme.data.model.PlaceEntity
+import java.lang.ref.WeakReference
 
 class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View {
 
@@ -23,7 +24,7 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
             Injector.providePlaceRepository(requireContext()),
             Injector.provideCategoryRepository()
         ).apply {
-            view = this@HomeFragment
+            view = WeakReference(this@HomeFragment)
         }
     }
 
@@ -48,19 +49,17 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
     }
 
     override fun showPlaces(places: List<PlaceEntity>) {
-        activity?.runOnUiThread {
-            val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
-            val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
-            progressBar?.visibility = View.GONE
-            adapter = ModernHomeAdapter(places, this)
-            recyclerView?.adapter = adapter
-        }
+
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
+        val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
+        progressBar?.visibility = View.GONE
+        adapter = ModernHomeAdapter(places, this)
+        recyclerView?.adapter = adapter
+
     }
 
     override fun showCategories(categories: List<ParentCategoryEntity>) {
-        activity?.runOnUiThread {
-            adapter?.parentCategories = categories
-        }
+        adapter?.parentCategories = categories
     }
 
     override fun onPlaceItemCliced(placeEntity: PlaceEntity) {
@@ -73,4 +72,10 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
     override fun onItemStarred(placeEntity: PlaceEntity) {
         presenter.onItemStarred(placeEntity)
     }
+
+    override fun onDestroyView() {
+        presenter.onDestroyView()
+        super.onDestroyView()
+    }
+
 }
