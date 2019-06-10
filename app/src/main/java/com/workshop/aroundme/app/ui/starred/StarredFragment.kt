@@ -5,12 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 
 class StarredFragment : Fragment() {
+
+    private val starredViewModelFactory by lazy {
+        StarredViewModelFactory(Injector.providePlaceRepository(requireContext()))
+    }
+    private val starredViewModel by lazy {
+        ViewModelProviders.of(this, starredViewModelFactory)[StarredViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_list, container, false)
@@ -22,12 +31,10 @@ class StarredFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        val repository = Injector.providePlaceRepository(view.context)
+        starredViewModel.onViewCreated()
 
-        repository.getStarredPlaces { places ->
-            activity?.runOnUiThread {
-                recyclerView.adapter = StarredAdapter(places)
-            }
-        }
+        starredViewModel.getStarredPlaces().observe(this, Observer {places ->
+            recyclerView.adapter = StarredAdapter(places)
+        })
     }
 }

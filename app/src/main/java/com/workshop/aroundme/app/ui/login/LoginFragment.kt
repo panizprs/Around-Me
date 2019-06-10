@@ -9,11 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.home.HomeFragment
 
 class LoginFragment : Fragment(), LoginContract.View {
+
+
+    private val loginViewModelFactory by lazy {
+        LoginViewModelFactory(Injector.provideUserRepository(requireContext()))
+    }
+
+    private val loginViewModel by lazy {
+        ViewModelProviders.of(this , loginViewModelFactory).get(LoginViewModel::class.java)
+    }
 
     private lateinit var usernameEditText: EditText
 
@@ -32,13 +43,38 @@ class LoginFragment : Fragment(), LoginContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        presenter = LoginPresenter(this, Injector.provideUserRepository(requireContext()))
+//        presenter = LoginPresenter(this, Injector.provideUserRepository(requireContext()))
+
+
+        loginViewModel.apply {
+
+            showHomeFragment.observe(this@LoginFragment, Observer {
+                fragmentManager?.beginTransaction()
+                    ?.replace(R.id.content_frame, HomeFragment())
+                    ?.commit()
+            })
+
+            showErrorMessageToUser.observe(this@LoginFragment, Observer { titleMsg ->
+                AlertDialog.Builder(requireContext())
+                    .setTitle(titleMsg.first)
+                    .setMessage(titleMsg.second)
+                    .setPositiveButton(getString(R.string.ok)) { dialogInterface: DialogInterface, i: Int ->
+                        dialogInterface.dismiss()
+                    }
+                    .create()
+                    .show()
+            })
+        }
+
 
         usernameEditText = view.findViewById(R.id.username)
         passwordEditText = view.findViewById(R.id.password)
         view.findViewById<View>(R.id.login).setOnClickListener {
-            presenter.onLoginButtonClicked()
+//            presenter.onLoginButtonClicked()
+            loginViewModel.loginUser(usernameEditText.text.toString(), passwordEditText.text.toString())
         }
+
+
     }
 
     override fun getUsernameValue(): String {

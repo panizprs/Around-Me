@@ -20,25 +20,24 @@ class PlaceRepository(
 
     fun getFeaturedPlaces(): Single<List<PlaceEntity>> {
         return placeRemoteDataSource.getFeaturedPlaces().map { placeDtos ->
-                placeDtos.map {placeDto ->
-                    placeDto.toPlaceEntity()
-                }
+            placeDtos.map { placeDto ->
+                placeDto.toPlaceEntity()
             }
+        }
     }
 
-    fun getPlaceDetail(slug: String) : Single<PlaceDetailEntity?> {
-        return placeRemoteDataSource.getPlaceDetail(slug).map {detailResponseDto ->
+    fun getPlaceDetail(slug: String): Single<PlaceDetailEntity?> {
+        return placeRemoteDataSource.getPlaceDetail(slug).map { detailResponseDto ->
             detailResponseDto.toPlaceDetailEntity()
         }
     }
 
     @WorkerThread
-    fun getStarredPlaces(success: (List<PlaceEntity>) -> Unit) {
-        thread {
-            val places = placeLocalDataSource.getStarredPlaces().map { localPlace ->
+    fun getStarredPlaces(): Single<List<PlaceEntity>> {
+        return Single.fromCallable {
+            placeLocalDataSource.getStarredPlaces().map { localPlace ->
                 localPlace.toPlaceEntity()
             }
-            success(places)
         }
     }
 
