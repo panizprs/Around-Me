@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
@@ -14,6 +17,17 @@ import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.data.model.PlaceDetailEntity
 
 class DetailFragment : Fragment() {
+
+    private val detailViewModelFactory: DetailViewModelFactory by lazy{
+        DetailViewModelFactory(Injector.providePlaceRepository(requireContext()))
+    }
+
+    private val detailViewModel by lazy {
+        ViewModelProviders.of(
+            this,
+            detailViewModelFactory
+        )[com.workshop.aroundme.app.ui.detail.DetailViewModel::class.java]
+    }
 
     private var slug: String? = null
     private var recyclerView: RecyclerView? = null
@@ -23,6 +37,7 @@ class DetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         slug = arguments?.getString(KEY_SLUG)
+        println(slug)
     }
 
     override fun onCreateView(
@@ -45,21 +60,19 @@ class DetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        slug?.let { mySlug ->
-            val repository = Injector.providePlaceRepository(requireContext())
-            repository.getPlaceDetail(mySlug)
-        } ?: run {
-            Toast.makeText(requireContext(), "Slug must not be null", Toast.LENGTH_LONG).show()
-        }
-    }
+        detailViewModel.getPlaceDetail(slug)
 
-    private fun onDetailReady(placeDetailEntity: PlaceDetailEntity?) {
-        activity?.runOnUiThread {
+        detailViewModel.placeDetail.observe(this, Observer {placeDetailEntity ->
             placeDetailEntity?.let {
                 recyclerView?.adapter = DetailsAdapter(placeDetailEntity)
                 loading?.visibility = View.GONE
             }
-        }
+        })
+
+        detailViewModel.error.observe(this, Observer {error ->
+            Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
+        })
+
     }
 
     companion object {

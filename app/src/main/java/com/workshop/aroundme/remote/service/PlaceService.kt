@@ -7,6 +7,7 @@ import com.workshop.aroundme.remote.model.response.PlaceDetailResponseDto
 
 import io.reactivex.Single
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -16,8 +17,8 @@ interface PlaceService {
     fun getPlaces() : Single<FeaturedPlacesResponseDto?>
 
 
-    @GET("v1/place/")
-    fun getPlaceDetail(@Query("slug") slug : String) : Single<PlaceDetailResponseDto?>
+    @GET("v1/place/{slug}")
+    fun getPlaceDetail(@Path(value = "slug", encoded = true) slug : String) : Single<PlaceDetailResponseDto?>
 
 
 
