@@ -1,25 +1,28 @@
 package com.workshop.aroundme.remote.service
 
 import com.google.gson.Gson
-import com.workshop.aroundme.remote.NetworkManager
+import com.workshop.aroundme.remote.model.response.DetailResponseDto
 import com.workshop.aroundme.remote.model.response.FeaturedPlacesResponseDto
 import com.workshop.aroundme.remote.model.response.PlaceDetailResponseDto
 
-class PlaceService(private val networkManager: NetworkManager) {
+import io.reactivex.Single
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-    fun getFeaturedPlacesResponse(): FeaturedPlacesResponseDto {
-        val rawData = networkManager.get(URL_FEATURED)
-        return Gson().fromJson(rawData, FeaturedPlacesResponseDto::class.java)
-    }
 
-    fun getPlaceDetailResponse(slug: String): PlaceDetailResponseDto {
-        val url = URL_PLACE_DETAIL + slug
-        val rawData = networkManager.get(url)
-        return Gson().fromJson(rawData, PlaceDetailResponseDto::class.java)
-    }
+interface PlaceService {
+
+    @GET("v1/featured")
+    fun getPlaces() : Single<FeaturedPlacesResponseDto?>
+
+
+    @GET("v1/place/")
+    fun getPlaceDetail(@Query("slug") slug : String) : Single<PlaceDetailResponseDto?>
+
+
+
 
     companion object {
-        const val URL_FEATURED = "http://restapis.xyz/around-me/v1/featured"
-        const val URL_PLACE_DETAIL = "http://restapis.xyz/around-me/v1/place/"
+        const val BASE_URL = "http://restapis.xyz/around-me/"
     }
 }

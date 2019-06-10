@@ -7,8 +7,7 @@ import io.reactivex.Single
 class CategoryRepository(private val categoryRemoteDataSource: CategoryRemoteDataSource) {
 
     fun getCategories(): Single<List<ParentCategoryEntity>> {
-        return Single.fromCallable {
-            categoryRemoteDataSource.getCategories()
-        }
+        return categoryRemoteDataSource.getCategories()
+
     }
 }

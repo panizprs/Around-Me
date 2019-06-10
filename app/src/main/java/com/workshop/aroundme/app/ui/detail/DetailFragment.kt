@@ -47,7 +47,7 @@ class DetailFragment : Fragment() {
 
         slug?.let { mySlug ->
             val repository = Injector.providePlaceRepository(requireContext())
-            repository.getPlaceDetail(mySlug, ::onDetailReady)
+            repository.getPlaceDetail(mySlug)
         } ?: run {
             Toast.makeText(requireContext(), "Slug must not be null", Toast.LENGTH_LONG).show()
         }

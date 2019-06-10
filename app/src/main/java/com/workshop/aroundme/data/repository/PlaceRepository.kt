@@ -8,6 +8,7 @@ import com.workshop.aroundme.data.model.PlaceDetailEntity
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
 import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
+import com.workshop.aroundme.remote.model.response.DetailResponseDto
 import io.reactivex.Completable
 import io.reactivex.Single
 import kotlin.concurrent.thread
@@ -18,17 +19,16 @@ class PlaceRepository(
 ) {
 
     fun getFeaturedPlaces(): Single<List<PlaceEntity>> {
-        return Single.fromCallable {
-            placeRemoteDataSource.getFeaturedPlaces()?.map { placeDto ->
-                placeDto.toPlaceEntity()
+        return placeRemoteDataSource.getFeaturedPlaces().map { placeDtos ->
+                placeDtos.map {placeDto ->
+                    placeDto.toPlaceEntity()
+                }
             }
-        }
     }
 
-    fun getPlaceDetail(slug: String, success: (PlaceDetailEntity?) -> Unit) {
-        thread {
-            val entity = placeRemoteDataSource.getPlaceDetail(slug)?.toPlaceDetailEntity()
-            success(entity)
+    fun getPlaceDetail(slug: String) : Single<PlaceDetailEntity?> {
+        return placeRemoteDataSource.getPlaceDetail(slug).map {detailResponseDto ->
+            detailResponseDto.toPlaceDetailEntity()
         }
     }
 
