@@ -9,6 +9,8 @@ import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.data.repository.CategoryRepository
 import com.workshop.aroundme.data.repository.PlaceRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 
 class HomeViewModel(
@@ -26,6 +28,8 @@ class HomeViewModel(
     private val _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> = _error
 
+    private val compositeDisposable = CompositeDisposable()
+
     fun loadHomePage() {
         placeRepository.getFeaturedPlaces()
             .subscribeOn(Schedulers.io())
@@ -42,7 +46,15 @@ class HomeViewModel(
                 _categories.value = it ?: emptyList()
             }, {
                 _error.value = it
-            })
+            }).addTo(compositeDisposable)
 
+    }
+
+    fun onItemStarred(placeEntity: PlaceEntity) {
+        placeRepository.starPlace(placeEntity)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+            .addTo(compositeDisposable)
     }
 }

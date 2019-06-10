@@ -100,7 +100,8 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
     }
 
     override fun onItemStarred(placeEntity: PlaceEntity) {
-        presenter.onItemStarred(placeEntity)
+//        presenter.onItemStarred(placeEntity)
+        homeViewModel.onItemStarred(placeEntity)
     }
 
     override fun onDestroyView() {

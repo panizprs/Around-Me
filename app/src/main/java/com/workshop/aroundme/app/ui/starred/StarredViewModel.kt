@@ -33,6 +33,13 @@ class StarredViewModel(private val placeRepository: PlaceRepository) : ViewModel
             }).addTo(disposables)
     }
 
+    fun onItemStarred(placeEntity: PlaceEntity) {
+        placeRepository.starPlace(placeEntity)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+    }
+
     fun onDestroyView(){
         if(!disposables.isDisposed)
             disposables.dispose()
