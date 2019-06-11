@@ -4,20 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
-import com.workshop.aroundme.data.model.ParentCategoryEntity
+import com.workshop.aroundme.data.model.ParentCategory
 import com.workshop.aroundme.data.model.Place
-import com.workshop.aroundme.data.model.PlaceEntity
 
 class ModernHomeAdapter(
-    private val items: List<Place>,
     private val onHomePlaceItemClickListener: OnHomePlaceItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var parentCategories = listOf<ParentCategoryEntity>()
+    var parentCategories = listOf<ParentCategory>()
         set(value) {
             field = value
             notifyItemChanged(0)
         }
+
+    var items = listOf<Place>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -49,7 +49,7 @@ class ModernHomeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             ITEM_TYPE_CATEGORIES_ITEM -> {
-                (holder as CategoriesViewHolder).bind(parentCategories, onHomePlaceItemClickListener)
+                (holder as CategoriesViewHolder).bind(parentCategories)
             }
             ITEM_TYPE_PLACE_ITEM -> {
                 (holder as HomeViewHolder).bind(items[position - 1], onHomePlaceItemClickListener)

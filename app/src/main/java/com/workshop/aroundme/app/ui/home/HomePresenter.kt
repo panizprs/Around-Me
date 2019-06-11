@@ -1,9 +1,8 @@
 package com.workshop.aroundme.app.ui.home
 
 import com.workshop.aroundme.data.model.Place
-import com.workshop.aroundme.data.model.PlaceEntity
-import com.workshop.aroundme.data.repository.CategoryRepository
 import com.workshop.aroundme.data.repository.PlaceRepositoryImpl
+import com.workshop.aroundme.domain.repository.CategoryRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo

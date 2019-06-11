@@ -5,12 +5,14 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.workshop.aroundme.app.executor.BackgroundThread
 import com.workshop.aroundme.app.executor.MainThread
-import com.workshop.aroundme.data.repository.CategoryRepository
+import com.workshop.aroundme.data.repository.CategoryRepositoryImpl
 import com.workshop.aroundme.data.repository.PlaceRepositoryImpl
 import com.workshop.aroundme.data.repository.UserRepository
+import com.workshop.aroundme.domain.interactor.category.GetCategoriesUseCase
 import com.workshop.aroundme.domain.interactor.place.GetPlacesUseCase
 import com.workshop.aroundme.domain.interactor.place.GetStarredPlacesUseCase
 import com.workshop.aroundme.domain.interactor.place.StarPlaceUseCase
+import com.workshop.aroundme.domain.repository.CategoryRepository
 import com.workshop.aroundme.local.AppDatabase
 import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
 import com.workshop.aroundme.local.datasource.UserLocalDataSource
@@ -44,8 +46,14 @@ object Injector {
     fun provideCategoryService(retrofit: Retrofit) = retrofit.create(CategoryService::class.java)
 
 
+    fun provideCategoryUseCase() : GetCategoriesUseCase{
+        return GetCategoriesUseCase(provideCategoryRepository(),
+            MainThread(),
+            BackgroundThread())
+    }
+
     fun provideCategoryRepository(): CategoryRepository {
-        return CategoryRepository(CategoryRemoteDataSource(provideCategoryService(provideRetrofitClient())))
+        return CategoryRepositoryImpl(CategoryRemoteDataSource(provideCategoryService(provideRetrofitClient())))
     }
 
     fun provideStarPlaceUseCase(context: Context): StarPlaceUseCase {

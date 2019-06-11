@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.workshop.aroundme.data.model.Place
+import com.workshop.aroundme.domain.interactor.base.None
 import com.workshop.aroundme.domain.interactor.place.GetStarredPlacesUseCase
 import com.workshop.aroundme.domain.interactor.place.StarPlaceUseCase
 
@@ -24,7 +25,7 @@ class StarredViewModel(
     val error: LiveData<Throwable> = _error
 
     fun onViewCreated() {
-        getStarredPlacesUseCase.execute(GetStarredPlacesUseCase.None(), ::getPlacesSuccess, ::fail)
+        getStarredPlacesUseCase.execute(None(), ::getPlacesSuccess, ::fail)
     }
 
     fun onItemStarred(place: Place) {

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
-import com.workshop.aroundme.data.model.ParentCategoryEntity
+import com.workshop.aroundme.data.model.ParentCategory
 import com.workshop.aroundme.data.model.Place
 import java.lang.ref.WeakReference
 
@@ -24,7 +24,7 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
         HomeViewModelFactory(
             Injector.providePlacesUseCase(requireContext()),
             Injector.provideStarPlaceUseCase(requireContext()),
-            Injector.provideCategoryRepository()
+            Injector.provideCategoryUseCase()
         )
     }
 
@@ -32,7 +32,7 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
         ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
     }
 
-    private var adapter: ModernHomeAdapter? = null
+    private var adapter = ModernHomeAdapter(this)
 
     private val presenter: HomeContract.Presenter by lazy {
         HomePresenter(
@@ -69,13 +69,17 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
 
         homeViewModel.places.observe(this, Observer {places ->
             progressBar?.visibility = View.GONE
-            adapter = ModernHomeAdapter(places, this)
+            adapter.items = places
+            println("adapter : " + adapter.parentCategories.size)
             recyclerView?.adapter = adapter
         })
 
         homeViewModel.categories.observe(this, Observer {categories->
-            adapter?.parentCategories = categories
+            println(categories.size)
+            adapter.parentCategories = categories
         })
+
+
     }
 
     override fun showPlaces(places: List<Place>) {
@@ -83,13 +87,14 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
         val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
         progressBar?.visibility = View.GONE
-        adapter = ModernHomeAdapter(places, this)
+        adapter = ModernHomeAdapter(this)
+        adapter.items = places
         recyclerView?.adapter = adapter
 
     }
 
-    override fun showCategories(categories: List<ParentCategoryEntity>) {
-        adapter?.parentCategories = categories
+    override fun showCategories(categories: List<ParentCategory>) {
+        adapter.parentCategories = categories
     }
 
     override fun onPlaceItemClicked(place: Place) {

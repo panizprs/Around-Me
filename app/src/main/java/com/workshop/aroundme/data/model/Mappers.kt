@@ -20,3 +20,13 @@ fun PlaceEntity.toLocalPlace() = LocalPlace(
     isStarred = isFavorite
 )
 
+fun CategoryEntity.toCategory()  = Category(
+    icon = icon,
+    id = id,
+    name = name
+)
+
+fun ParentCategoryEntity.toParentCategory() = ParentCategory(
+    name = name,
+    children = children?.map { categoryEntity -> categoryEntity.toCategory() }
+)

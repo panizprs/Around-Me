@@ -1,13 +1,19 @@
 package com.workshop.aroundme.data.repository
 
+import com.workshop.aroundme.data.model.ParentCategory
 import com.workshop.aroundme.data.model.ParentCategoryEntity
+import com.workshop.aroundme.data.model.toParentCategory
+import com.workshop.aroundme.domain.repository.CategoryRepository
 import com.workshop.aroundme.remote.datasource.CategoryRemoteDataSource
 import io.reactivex.Single
 
-class CategoryRepository(private val categoryRemoteDataSource: CategoryRemoteDataSource) {
+class CategoryRepositoryImpl(private val categoryRemoteDataSource: CategoryRemoteDataSource) : CategoryRepository {
 
-    fun getCategories(): Single<List<ParentCategoryEntity>> {
-        return categoryRemoteDataSource.getCategories()
-
+    override fun getCategories(): Single<List<ParentCategory>> {
+        return categoryRemoteDataSource.getCategories().map {categories ->
+            categories.map{parentCategoryEntity ->
+                parentCategoryEntity.toParentCategory()
+            }
+        }
     }
 }
