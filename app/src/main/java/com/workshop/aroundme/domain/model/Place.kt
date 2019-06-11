@@ -7,5 +7,6 @@ data class Place(
     val likes: Int?,
     val imageUrl: String?,
     var isFavorite: Boolean,
-    val slug: String?
+    val slug: String?,
+    val total_views: Int?
 )
