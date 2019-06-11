@@ -1,15 +1,21 @@
 package com.workshop.aroundme.local.datasource
 
+import com.workshop.aroundme.data.datasource.PlaceDataSource
+import com.workshop.aroundme.data.model.PlaceEntity
+import com.workshop.aroundme.data.model.toLocalPlace
 import com.workshop.aroundme.local.dao.PlaceDao
 import com.workshop.aroundme.local.model.LocalPlace
+import com.workshop.aroundme.local.model.toPlaceEntity
 
-class PlaceLocalDataSource(private val placeDao: PlaceDao) {
+class PlaceLocalDataSource(private val placeDao: PlaceDao) : PlaceDataSource {
 
-    fun getStarredPlaces(): List<LocalPlace> {
-        return placeDao.listStarredPlaces()
+    override fun getStarredPlaces(): List<PlaceEntity> {
+        return placeDao.listStarredPlaces().map {localPlace ->
+            localPlace.toPlaceEntity()
+        }
     }
 
-    fun starPlace(localPlace: LocalPlace) {
-        placeDao.insert(localPlace)
+    override fun starPlace(placeEntity: PlaceEntity) {
+        placeDao.insert(placeEntity.toLocalPlace())
     }
 }

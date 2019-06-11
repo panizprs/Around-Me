@@ -8,9 +8,10 @@ import com.workshop.aroundme.app.ui.detail.viewholder.CoverViewHolder
 import com.workshop.aroundme.app.ui.detail.viewholder.LocationViewHolder
 import com.workshop.aroundme.app.ui.detail.viewholder.PlaceInfoViewHolder
 import com.workshop.aroundme.app.ui.detail.viewholder.TagsViewHolder
-import com.workshop.aroundme.data.model.PlaceDetailEntity
+import com.workshop.aroundme.data.model.PlaceDetail
 
-class DetailsAdapter(private val placeDetailEntity: PlaceDetailEntity) :
+
+class DetailsAdapter(private val placeDetail: PlaceDetail) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -54,10 +55,10 @@ class DetailsAdapter(private val placeDetailEntity: PlaceDetailEntity) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewType = getItemViewType(position)
         when (viewType) {
-            ITEM_TYPE_COVER -> (holder as CoverViewHolder).bind(placeDetailEntity)
-            ITEM_TYPE_PLACE_INFO -> (holder as PlaceInfoViewHolder).bind(placeDetailEntity)
-            ITEM_TYPE_LOCATION -> (holder as LocationViewHolder).bind(placeDetailEntity)
-            ITEM_TYPE_TAGS -> (holder as TagsViewHolder).bind(placeDetailEntity)
+            ITEM_TYPE_COVER -> (holder as CoverViewHolder).bind(placeDetail)
+            ITEM_TYPE_PLACE_INFO -> (holder as PlaceInfoViewHolder).bind(placeDetail)
+            ITEM_TYPE_LOCATION -> (holder as LocationViewHolder).bind(placeDetail)
+            ITEM_TYPE_TAGS -> (holder as TagsViewHolder).bind(placeDetail)
         }
     }
 

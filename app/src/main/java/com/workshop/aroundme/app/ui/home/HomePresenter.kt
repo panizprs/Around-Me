@@ -1,8 +1,9 @@
 package com.workshop.aroundme.app.ui.home
 
+import com.workshop.aroundme.data.model.Place
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.data.repository.CategoryRepository
-import com.workshop.aroundme.data.repository.PlaceRepository
+import com.workshop.aroundme.data.repository.PlaceRepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -10,7 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import java.lang.ref.WeakReference
 
 class HomePresenter(
-    private val placeRepository: PlaceRepository,
+    private val placeRepository: PlaceRepositoryImpl,
     private val categoryRepository: CategoryRepository
 ) : HomeContract.Presenter {
 
@@ -38,8 +39,8 @@ class HomePresenter(
             .addTo(compositeDisposable)
     }
 
-    override fun onItemStarred(placeEntity: PlaceEntity) {
-        placeRepository.starPlace(placeEntity)
+    override fun onItemStarred(place : Place) {
+        placeRepository.starPlace(place)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()

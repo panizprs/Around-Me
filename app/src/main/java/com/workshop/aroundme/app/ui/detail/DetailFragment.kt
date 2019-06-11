@@ -62,9 +62,9 @@ class DetailFragment : Fragment() {
 
         detailViewModel.getPlaceDetail(slug)
 
-        detailViewModel.placeDetail.observe(this, Observer {placeDetailEntity ->
-            placeDetailEntity?.let {
-                recyclerView?.adapter = DetailsAdapter(placeDetailEntity)
+        detailViewModel.placeDetail.observe(this, Observer {placeDetail ->
+            placeDetail?.let {
+                recyclerView?.adapter = DetailsAdapter(placeDetail)
                 loading?.visibility = View.GONE
             }
         })

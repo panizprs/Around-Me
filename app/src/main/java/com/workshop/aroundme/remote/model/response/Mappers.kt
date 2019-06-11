@@ -1,12 +1,9 @@
-package com.workshop.aroundme.data.mapper
+package com.workshop.aroundme.remote.model.response
 
 import com.workshop.aroundme.data.model.CategoryEntity
 import com.workshop.aroundme.data.model.PlaceDetailEntity
 import com.workshop.aroundme.data.model.PlaceEntity
 import com.workshop.aroundme.local.model.LocalPlace
-import com.workshop.aroundme.remote.model.response.CategoryDto
-import com.workshop.aroundme.remote.model.response.DetailResponseDto
-import com.workshop.aroundme.remote.model.response.PlaceDto
 
 fun PlaceDto.toPlaceEntity() = PlaceEntity(
     name = full_name,
@@ -18,22 +15,7 @@ fun PlaceDto.toPlaceEntity() = PlaceEntity(
     slug = slug
 )
 
-fun LocalPlace.toPlaceEntity() = PlaceEntity(
-    name = name,
-    address = address,
-    likes = 0,
-    imageUrl = null,
-    isFavorite = isStarred,
-    placeId = placeId,
-    slug = null
-)
 
-fun PlaceEntity.toLocalPlace() = LocalPlace(
-    name = name ?: "",
-    placeId = placeId,
-    address = address ?: "",
-    isStarred = isFavorite
-)
 
 fun DetailResponseDto.toPlaceDetailEntity() = PlaceDetailEntity(
     coverUrl = cover_image?.image?.medium?.url,
@@ -42,7 +24,6 @@ fun DetailResponseDto.toPlaceDetailEntity() = PlaceDetailEntity(
     address = address,
     location = latlng,
     tags = tags?.joinToString(separator = " ،") { tag -> tag?.name.toString() }
-
 )
 
 fun CategoryDto.toCategoryEntity() = CategoryEntity(

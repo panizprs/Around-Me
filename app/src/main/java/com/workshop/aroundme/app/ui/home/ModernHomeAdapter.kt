@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
 import com.workshop.aroundme.data.model.ParentCategoryEntity
+import com.workshop.aroundme.data.model.Place
 import com.workshop.aroundme.data.model.PlaceEntity
 
 class ModernHomeAdapter(
-    private val items: List<PlaceEntity>,
+    private val items: List<Place>,
     private val onHomePlaceItemClickListener: OnHomePlaceItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

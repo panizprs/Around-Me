@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.workshop.aroundme.R
-import com.workshop.aroundme.data.model.PlaceEntity
+import com.workshop.aroundme.data.model.Place
 
 class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val nameTextView = itemView.findViewById<TextView>(R.id.name)
@@ -17,42 +17,42 @@ class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val favorite = itemView.findViewById<ImageView>(R.id.favorite)
 
     fun bind(
-        placeEntity: PlaceEntity,
+        place: Place,
         onHomePlaceItemClickListener: OnHomePlaceItemClickListener
     ) {
-        nameTextView.text = placeEntity.name
-        addressTextView.text = placeEntity.address
-        likesTextView.text = placeEntity.likes.toString()
+        nameTextView.text = place.name
+        addressTextView.text = place.address
+        likesTextView.text = place.likes.toString()
 
-        Picasso.get().load(placeEntity.imageUrl).into(image)
+        Picasso.get().load(place.imageUrl).into(image)
 
-        likesContainer.visibility = if (placeEntity.likes != null && placeEntity.likes > 0) {
+        likesContainer.visibility = if (place.likes != null && place.likes > 0) {
             View.VISIBLE
         } else {
             View.GONE
         }
 
-        if (placeEntity.isFavorite) {
+        if (place.isFavorite) {
             favorite.setImageResource(R.drawable.ic_star_on)
         } else {
             favorite.setImageResource(R.drawable.ic_star_off)
         }
 
         itemView.setOnClickListener {
-            onHomePlaceItemClickListener.onPlaceItemCliced(placeEntity)
+            onHomePlaceItemClickListener.onPlaceItemClicked(place)
         }
 
         favorite.setOnClickListener {
-            if (!placeEntity.isFavorite) {
+            if (!place.isFavorite) {
                 favorite.setImageResource(R.drawable.ic_star_on)
-                placeEntity.isFavorite = true
+                place.isFavorite = true
 
-                onHomePlaceItemClickListener.onItemStarred(placeEntity)
+                onHomePlaceItemClickListener.onItemStarred(place)
             } else {
                 favorite.setImageResource(R.drawable.ic_star_off)
-                placeEntity.isFavorite = false
+                place.isFavorite = false
 
-                onHomePlaceItemClickListener.onItemStarred(placeEntity)
+                onHomePlaceItemClickListener.onItemStarred(place)
             }
         }
     }

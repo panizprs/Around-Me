@@ -1,13 +1,14 @@
 package com.workshop.aroundme.app.ui.home
 
 import com.workshop.aroundme.data.model.ParentCategoryEntity
+import com.workshop.aroundme.data.model.Place
 import com.workshop.aroundme.data.model.PlaceEntity
 
 interface HomeContract {
 
     interface View : HomeContract {
 
-        fun showPlaces(places: List<PlaceEntity>)
+        fun showPlaces(places: List<Place>)
 
         fun showCategories(categories: List<ParentCategoryEntity>)
 
@@ -17,7 +18,7 @@ interface HomeContract {
 
         fun onActivityCreated()
 
-        fun onItemStarred(placeEntity: PlaceEntity)
+        fun onItemStarred(place: Place)
 
         fun onDestroyView()
 

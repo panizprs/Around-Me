@@ -3,46 +3,39 @@ package com.workshop.aroundme.app.ui.starred
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.workshop.aroundme.data.model.PlaceEntity
-import com.workshop.aroundme.data.repository.PlaceRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import com.workshop.aroundme.data.model.Place
+import com.workshop.aroundme.domain.interactor.place.GetStarredPlacesUseCase
+import com.workshop.aroundme.domain.interactor.place.StarPlaceUseCase
 
-class StarredViewModel(private val placeRepository: PlaceRepository) : ViewModel(){
+class StarredViewModel(
+    private val getStarredPlacesUseCase: GetStarredPlacesUseCase,
+    private val starPlaceUseCase: StarPlaceUseCase
+) : ViewModel() {
 
-    private val _StarredPlaces = MutableLiveData<List<PlaceEntity>>()
-//    val getStarredPlaces : LiveData<List<PlaceEntity>> = _StarredPlaces
+    private val _starredPlaces = MutableLiveData<List<Place>>()
+//    val getStarredPlaces : LiveData<List<PlaceEntity>> = _starredPlaces
 
-    private val disposables = CompositeDisposable()
-
-    fun getStarredPlaces() : LiveData<List<PlaceEntity>>{
-        return _StarredPlaces
+    fun getStarredPlaces(): LiveData<List<Place>> {
+        return _starredPlaces
     }
 
 
-    fun onViewCreated(){
-        placeRepository.getStarredPlaces()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({places ->
-                _StarredPlaces.value = places
-            },{
-                println("error $it")
-            }).addTo(disposables)
+    private val _error = MutableLiveData<Throwable>()
+    val error: LiveData<Throwable> = _error
+
+    fun onViewCreated() {
+        getStarredPlacesUseCase.execute(GetStarredPlacesUseCase.None(), ::getPlacesSuccess, ::fail)
     }
 
-    fun onItemStarred(placeEntity: PlaceEntity) {
-        placeRepository.starPlace(placeEntity)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
+    fun onItemStarred(place: Place) {
+        starPlaceUseCase.execute(place)
     }
 
-    fun onDestroyView(){
-        if(!disposables.isDisposed)
-            disposables.dispose()
+    private fun getPlacesSuccess(places: List<Place>?) {
+        _starredPlaces.value = places ?: emptyList()
     }
 
+    private fun fail(throwable: Throwable) {
+        _error.value = throwable
+    }
 }

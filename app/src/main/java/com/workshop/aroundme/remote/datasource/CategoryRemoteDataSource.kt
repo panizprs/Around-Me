@@ -1,6 +1,6 @@
 package com.workshop.aroundme.remote.datasource
 
-import com.workshop.aroundme.data.mapper.toCategoryEntity
+import com.workshop.aroundme.remote.model.response.toCategoryEntity
 import com.workshop.aroundme.data.model.ParentCategoryEntity
 import com.workshop.aroundme.remote.service.CategoryService
 import io.reactivex.Single

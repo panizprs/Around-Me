@@ -1,10 +1,10 @@
 package com.workshop.aroundme.app.ui.home
 
-import com.workshop.aroundme.data.model.PlaceEntity
+import com.workshop.aroundme.data.model.Place
 
 interface OnHomePlaceItemClickListener {
 
-    fun onPlaceItemCliced(placeEntity: PlaceEntity)
+    fun onPlaceItemClicked(place: Place)
 
-    fun onItemStarred(placeEntity: PlaceEntity)
+    fun onItemStarred(place: Place)
 }

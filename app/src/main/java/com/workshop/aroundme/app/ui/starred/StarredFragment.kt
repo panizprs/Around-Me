@@ -14,13 +14,16 @@ import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
 import com.workshop.aroundme.app.ui.home.HomeAdapter
 import com.workshop.aroundme.app.ui.home.OnHomePlaceItemClickListener
-import com.workshop.aroundme.data.model.PlaceEntity
+import com.workshop.aroundme.data.model.Place
 
 class StarredFragment : Fragment(), OnHomePlaceItemClickListener {
 
 
     private val starredViewModelFactory by lazy {
-        StarredViewModelFactory(Injector.providePlaceRepository(requireContext()))
+        StarredViewModelFactory(
+            Injector.provideStarredPlacesUseCase(requireContext()),
+            Injector.provideStarPlaceUseCase(requireContext())
+        )
     }
     private val starredViewModel by lazy {
         ViewModelProviders.of(this, starredViewModelFactory)[StarredViewModel::class.java]
@@ -45,16 +48,16 @@ class StarredFragment : Fragment(), OnHomePlaceItemClickListener {
         })
     }
 
-    override fun onPlaceItemCliced(placeEntity: PlaceEntity) {
+    override fun onPlaceItemClicked(place: Place) {
         fragmentManager?.beginTransaction()
-            ?.replace(R.id.content_frame, DetailFragment.newInstance(placeEntity.slug))
+            ?.replace(R.id.content_frame, DetailFragment.newInstance(place.slug))
             ?.addToBackStack(null)
             ?.commit()
     }
 
-    override fun onItemStarred(placeEntity: PlaceEntity) {
+    override fun onItemStarred(place: Place) {
 //        presenter.onItemStarred(placeEntity)
-        starredViewModel.onItemStarred(placeEntity)
+        starredViewModel.onItemStarred(place)
 
     }
 }

@@ -14,8 +14,7 @@ import com.workshop.aroundme.R
 import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
 import com.workshop.aroundme.data.model.ParentCategoryEntity
-import com.workshop.aroundme.data.model.PlaceEntity
-import kotlinx.android.synthetic.main.item_home_categories_item.*
+import com.workshop.aroundme.data.model.Place
 import java.lang.ref.WeakReference
 
 class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View {
@@ -23,7 +22,8 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
 
     private val homeViewModelFactory by lazy {
         HomeViewModelFactory(
-            Injector.providePlaceRepository(requireContext()),
+            Injector.providePlacesUseCase(requireContext()),
+            Injector.provideStarPlaceUseCase(requireContext()),
             Injector.provideCategoryRepository()
         )
     }
@@ -78,7 +78,7 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
         })
     }
 
-    override fun showPlaces(places: List<PlaceEntity>) {
+    override fun showPlaces(places: List<Place>) {
 
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
         val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
@@ -92,16 +92,16 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
         adapter?.parentCategories = categories
     }
 
-    override fun onPlaceItemCliced(placeEntity: PlaceEntity) {
+    override fun onPlaceItemClicked(place: Place) {
         fragmentManager?.beginTransaction()
-            ?.replace(R.id.content_frame, DetailFragment.newInstance(placeEntity.slug))
+            ?.replace(R.id.content_frame, DetailFragment.newInstance(place.slug))
             ?.addToBackStack(null)
             ?.commit()
     }
 
-    override fun onItemStarred(placeEntity: PlaceEntity) {
+    override fun onItemStarred(place: Place) {
 //        presenter.onItemStarred(placeEntity)
-        homeViewModel.onItemStarred(placeEntity)
+        homeViewModel.onItemStarred(place)
     }
 
     override fun onDestroyView() {

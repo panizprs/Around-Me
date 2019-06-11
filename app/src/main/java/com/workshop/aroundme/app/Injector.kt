@@ -3,9 +3,14 @@ package com.workshop.aroundme.app
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.workshop.aroundme.app.executor.BackgroundThread
+import com.workshop.aroundme.app.executor.MainThread
 import com.workshop.aroundme.data.repository.CategoryRepository
-import com.workshop.aroundme.data.repository.PlaceRepository
+import com.workshop.aroundme.data.repository.PlaceRepositoryImpl
 import com.workshop.aroundme.data.repository.UserRepository
+import com.workshop.aroundme.domain.interactor.place.GetPlacesUseCase
+import com.workshop.aroundme.domain.interactor.place.GetStarredPlacesUseCase
+import com.workshop.aroundme.domain.interactor.place.StarPlaceUseCase
 import com.workshop.aroundme.local.AppDatabase
 import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
 import com.workshop.aroundme.local.datasource.UserLocalDataSource
@@ -26,7 +31,6 @@ object Injector {
     }
 
 
-
     fun provideRetrofitClient() = Retrofit
         .Builder()
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -44,8 +48,32 @@ object Injector {
         return CategoryRepository(CategoryRemoteDataSource(provideCategoryService(provideRetrofitClient())))
     }
 
-    fun providePlaceRepository(context: Context): PlaceRepository {
-        return PlaceRepository(
+    fun provideStarPlaceUseCase(context: Context): StarPlaceUseCase {
+        return StarPlaceUseCase(
+            providePlaceRepository(context),
+            MainThread(),
+            BackgroundThread()
+        )
+    }
+
+    fun provideStarredPlacesUseCase(context: Context) : GetStarredPlacesUseCase {
+        return GetStarredPlacesUseCase(
+            providePlaceRepository(context),
+            MainThread(),
+            BackgroundThread()
+        )
+    }
+
+    fun providePlacesUseCase(context: Context): GetPlacesUseCase {
+        return GetPlacesUseCase(
+            providePlaceRepository(context),
+            MainThread(),
+            BackgroundThread()
+        )
+    }
+
+    fun providePlaceRepository(context: Context): PlaceRepositoryImpl {
+        return PlaceRepositoryImpl(
             PlaceLocalDataSource(
                 provideAppDatabase(context).placeDao()
             ),
