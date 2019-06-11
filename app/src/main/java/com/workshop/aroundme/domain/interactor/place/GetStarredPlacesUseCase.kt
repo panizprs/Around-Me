@@ -7,8 +7,9 @@ import com.workshop.aroundme.domain.interactor.base.None
 import com.workshop.aroundme.domain.interactor.base.SingleUseCase
 import com.workshop.aroundme.domain.repository.PlaceRepository
 import io.reactivex.Single
+import javax.inject.Inject
 
-class GetStarredPlacesUseCase(
+class GetStarredPlacesUseCase @Inject constructor(
     private val placeRepository: PlaceRepository,
     postExecutorThread: PostExecutorThread,
     useCaseExecutorThread: UseCaseExecutorThread

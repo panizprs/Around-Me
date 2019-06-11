@@ -8,15 +8,22 @@ import com.workshop.aroundme.R
 import com.workshop.aroundme.app.ui.home.HomeFragment
 import com.workshop.aroundme.app.ui.login.LoginFragment
 import com.workshop.aroundme.app.ui.starred.StarredFragment
+import com.workshop.aroundme.domain.interactor.user.IsLoggedInUserUseCase
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var isLoginUserUseCase: IsLoggedInUserUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val userRepository = Injector.provideUserRepository(this)
-        if (userRepository.isLoggedIn()) {
+
+
+        if (isLoginUserUseCase.isLoggedIn()) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.content_frame, HomeFragment())
                 .commit()

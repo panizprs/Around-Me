@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.workshop.aroundme.R
-import com.workshop.aroundme.data.model.UserEntity
-import com.workshop.aroundme.data.repository.UserRepository
+import com.workshop.aroundme.domain.interactor.user.LoginUserUseCase
+import com.workshop.aroundme.domain.model.User
 
-class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
+class LoginViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
 
 
     private val _showHomeFragment = MutableLiveData<Unit>()
@@ -20,8 +20,8 @@ class LoginViewModel(private val userRepository: UserRepository) : ViewModel() {
         if (userName.isNotEmpty() && userName == "reza"
             && password.isNotEmpty() && password == "1234"
         ) {
-            val user = UserEntity(userName)
-            userRepository.login(user)
+            val user = User(userName)
+            loginUserUseCase.execute(user)
             _showHomeFragment.value = Unit
 
         } else {

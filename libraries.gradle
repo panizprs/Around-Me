@@ -4,7 +4,7 @@ ext {
             retrofit        : "2.5.0",
             okHttp          : "3.12.1",
             gson            : "2.8.5",
-            dagger          : "2.16",
+            dagger          : "2.23.1",
             picasso         : "2.71828",
             rxkotlin        : "2.3.0",
             rxandroid       : "2.1.0",

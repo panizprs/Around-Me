@@ -1,8 +1,8 @@
 package com.workshop.aroundme.app.ui.login
 
 import com.workshop.aroundme.R
-import com.workshop.aroundme.data.model.UserEntity
-import com.workshop.aroundme.data.repository.UserRepository
+import com.workshop.aroundme.domain.model.User
+import com.workshop.aroundme.domain.repository.UserRepository
 
 class LoginPresenter(
     private val view: LoginContract.View,
@@ -16,7 +16,7 @@ class LoginPresenter(
         if (userName.isNotEmpty() && userName == "reza"
             && password.isNotEmpty() && password == "1234"
         ) {
-            val user = UserEntity(userName)
+            val user = User(userName)
             userRepository.login(user)
             view.showHomeFragment()
         } else {

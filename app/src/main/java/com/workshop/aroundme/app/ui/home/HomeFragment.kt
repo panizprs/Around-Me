@@ -11,22 +11,19 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
-import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
 import com.workshop.aroundme.data.model.ParentCategory
 import com.workshop.aroundme.data.model.Place
+import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
-class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View {
+class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, HomeContract.View {
 
 
-    private val homeViewModelFactory by lazy {
-        HomeViewModelFactory(
-            Injector.providePlacesUseCase(requireContext()),
-            Injector.provideStarPlaceUseCase(requireContext()),
-            Injector.provideCategoryUseCase()
-        )
-    }
+    @Inject
+    lateinit var homeViewModelFactory : HomeViewModelFactory
+
 
     private val homeViewModel by lazy {
         ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
@@ -34,14 +31,14 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
 
     private var adapter = ModernHomeAdapter(this)
 
-    private val presenter: HomeContract.Presenter by lazy {
-        HomePresenter(
-            Injector.providePlaceRepository(requireContext()),
-            Injector.provideCategoryRepository()
-        ).apply {
-            view = WeakReference(this@HomeFragment)
-        }
-    }
+//    private val presenter: HomeContract.Presenter by lazy {
+//        HomePresenter(
+//            Injector.providePlaceRepository(requireContext()),
+//            Injector.provideCategoryRepository()
+//        ).apply {
+//            view = WeakReference(this@HomeFragment)
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,7 +107,7 @@ class HomeFragment : Fragment(), OnHomePlaceItemClickListener, HomeContract.View
     }
 
     override fun onDestroyView() {
-        presenter.onDestroyView()
+//        presenter.onDestroyView()
         super.onDestroyView()
     }
 

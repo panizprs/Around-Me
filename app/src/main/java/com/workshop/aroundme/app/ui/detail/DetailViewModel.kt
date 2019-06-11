@@ -6,11 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.workshop.aroundme.data.model.PlaceDetail
 import com.workshop.aroundme.data.model.PlaceDetailEntity
 import com.workshop.aroundme.data.repository.PlaceRepositoryImpl
+import com.workshop.aroundme.domain.repository.PlaceRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class DetailViewModel(private val repository: PlaceRepositoryImpl) : ViewModel() {
+class DetailViewModel(private val repository: PlaceRepository) : ViewModel() {
 
     private val _placeDetail = MutableLiveData<PlaceDetail>()
     val placeDetail: LiveData<PlaceDetail> = _placeDetail

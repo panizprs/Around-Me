@@ -6,10 +6,12 @@ import com.workshop.aroundme.domain.executor.PostExecutorThread
 import com.workshop.aroundme.domain.executor.UseCaseExecutorThread
 import com.workshop.aroundme.domain.interactor.base.None
 import com.workshop.aroundme.domain.interactor.base.SingleUseCase
+import com.workshop.aroundme.domain.repository.PlaceRepository
 import io.reactivex.Single
+import javax.inject.Inject
 
-class GetPlacesUseCase(
-    private val placeRepository: PlaceRepositoryImpl,
+class GetPlacesUseCase @Inject constructor(
+    private val placeRepository: PlaceRepository,
     postExecutorThread: PostExecutorThread,
     useCaseExecutorThread: UseCaseExecutorThread
 ) : SingleUseCase<None, List<Place>>(postExecutorThread, useCaseExecutorThread) {

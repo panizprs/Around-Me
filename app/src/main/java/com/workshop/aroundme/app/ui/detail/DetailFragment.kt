@@ -8,19 +8,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
-import com.workshop.aroundme.app.Injector
-import com.workshop.aroundme.data.model.PlaceDetailEntity
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class DetailFragment : Fragment() {
+class DetailFragment : DaggerFragment() {
 
-    private val detailViewModelFactory: DetailViewModelFactory by lazy{
-        DetailViewModelFactory(Injector.providePlaceRepository(requireContext()))
-    }
+    @Inject
+    lateinit var detailViewModelFactory: DetailViewModelFactory
 
     private val detailViewModel by lazy {
         ViewModelProviders.of(

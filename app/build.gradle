@@ -53,6 +53,8 @@ dependencies {
 
     implementation "com.google.dagger:dagger:$libraries.dagger"
     kapt "com.google.dagger:dagger-compiler:$libraries.dagger"
+    implementation "com.google.dagger:dagger-android-support:$libraries.dagger"
+    kapt "com.google.dagger:dagger-android-processor:$libraries.dagger"
 
     implementation "com.squareup.picasso:picasso:$libraries.picasso"
 

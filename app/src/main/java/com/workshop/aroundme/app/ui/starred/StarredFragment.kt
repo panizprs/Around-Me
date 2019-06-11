@@ -10,21 +10,19 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
-import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.detail.DetailFragment
 import com.workshop.aroundme.app.ui.home.HomeAdapter
 import com.workshop.aroundme.app.ui.home.OnHomePlaceItemClickListener
 import com.workshop.aroundme.data.model.Place
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class StarredFragment : Fragment(), OnHomePlaceItemClickListener {
+class StarredFragment : DaggerFragment(), OnHomePlaceItemClickListener {
+
+    @Inject
+    lateinit var starredViewModelFactory : StarredViewModelFactory
 
 
-    private val starredViewModelFactory by lazy {
-        StarredViewModelFactory(
-            Injector.provideStarredPlacesUseCase(requireContext()),
-            Injector.provideStarPlaceUseCase(requireContext())
-        )
-    }
     private val starredViewModel by lazy {
         ViewModelProviders.of(this, starredViewModelFactory)[StarredViewModel::class.java]
     }

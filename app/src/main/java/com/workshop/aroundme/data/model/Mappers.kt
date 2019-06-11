@@ -30,3 +30,13 @@ fun ParentCategoryEntity.toParentCategory() = ParentCategory(
     name = name,
     children = children?.map { categoryEntity -> categoryEntity.toCategory() }
 )
+
+
+fun PlaceDetailEntity.toPlaceDetail() = PlaceDetail(
+    coverUrl = coverUrl,
+    name = name,
+    categories = categories,
+    address = address,
+    location = location,
+    tags = tags
+)

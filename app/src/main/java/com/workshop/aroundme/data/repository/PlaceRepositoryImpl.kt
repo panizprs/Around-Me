@@ -1,12 +1,11 @@
 package com.workshop.aroundme.data.repository
 
 import androidx.annotation.WorkerThread
+import com.workshop.aroundme.data.datasource.PlaceLocalDataSource
+import com.workshop.aroundme.data.datasource.PlaceRemoteDataSource
 import com.workshop.aroundme.data.model.*
-import com.workshop.aroundme.domain.model.toPlaceDetail
 import com.workshop.aroundme.domain.model.toPlaceEntity
 import com.workshop.aroundme.domain.repository.PlaceRepository
-import com.workshop.aroundme.local.datasource.PlaceLocalDataSource
-import com.workshop.aroundme.remote.datasource.PlaceRemoteDataSource
 import io.reactivex.Completable
 import io.reactivex.Single
 

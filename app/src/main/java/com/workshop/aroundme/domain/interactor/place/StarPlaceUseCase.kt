@@ -7,8 +7,9 @@ import com.workshop.aroundme.domain.interactor.base.CompletableUseCase
 import com.workshop.aroundme.domain.model.toPlaceEntity
 import com.workshop.aroundme.domain.repository.PlaceRepository
 import io.reactivex.Completable
+import javax.inject.Inject
 
-class StarPlaceUseCase(
+class StarPlaceUseCase @Inject constructor(
     private val placeRepository: PlaceRepository,
     postExecutorThread: PostExecutorThread,
     useCaseExecutorThread: UseCaseExecutorThread

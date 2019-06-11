@@ -7,8 +7,9 @@ import com.workshop.aroundme.domain.interactor.base.None
 import com.workshop.aroundme.domain.interactor.base.SingleUseCase
 import com.workshop.aroundme.domain.repository.CategoryRepository
 import io.reactivex.Single
+import javax.inject.Inject
 
-class GetCategoriesUseCase(
+class GetCategoriesUseCase @Inject constructor(
     private val categoryRepository: CategoryRepository,
     postExecutorThread: PostExecutorThread,
     useCaseExecutorThread: UseCaseExecutorThread

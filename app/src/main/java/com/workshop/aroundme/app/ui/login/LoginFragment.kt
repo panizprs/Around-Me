@@ -1,6 +1,5 @@
 package com.workshop.aroundme.app.ui.login
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -12,15 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.workshop.aroundme.R
-import com.workshop.aroundme.app.Injector
 import com.workshop.aroundme.app.ui.home.HomeFragment
+import com.workshop.aroundme.domain.interactor.user.LoginUserUseCase
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-class LoginFragment : Fragment(), LoginContract.View {
+class LoginFragment : DaggerFragment(), LoginContract.View {
 
+    @Inject
+    lateinit var loginUserUseCase : LoginUserUseCase
 
-    private val loginViewModelFactory by lazy {
-        LoginViewModelFactory(Injector.provideUserRepository(requireContext()))
-    }
+    @Inject
+    lateinit var loginViewModelFactory : LoginViewModelFactory
+
 
     private val loginViewModel by lazy {
         ViewModelProviders.of(this , loginViewModelFactory).get(LoginViewModel::class.java)
