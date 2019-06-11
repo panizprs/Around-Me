@@ -9,7 +9,8 @@ fun PlaceEntity.toPlace() = Place(
     imageUrl = imageUrl,
     address = address,
     slug = slug,
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
+    total_views = total_views
 )
 
 

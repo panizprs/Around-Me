@@ -9,5 +9,6 @@ fun LocalPlace.toPlaceEntity() = PlaceEntity(
     imageUrl = null,
     isFavorite = isStarred,
     placeId = placeId,
-    slug = null
+    slug = null,
+    total_views = 0
 )

@@ -18,8 +18,7 @@ import dagger.android.support.DaggerFragment
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
-class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, HomeContract.View {
-
+class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, OnSortDropDownMenuClickListener , HomeContract.View {
 
     @Inject
     lateinit var homeViewModelFactory : HomeViewModelFactory
@@ -29,7 +28,9 @@ class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, HomeContrac
         ViewModelProviders.of(this, homeViewModelFactory).get(HomeViewModel::class.java)
     }
 
-    private var adapter = ModernHomeAdapter(this)
+    private val adapter: ModernHomeAdapter by lazy {
+        ModernHomeAdapter(this, this)
+    }
 
 //    private val presenter: HomeContract.Presenter by lazy {
 //        HomePresenter(
@@ -50,44 +51,40 @@ class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, HomeContrac
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        println("onViewCreated")
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+        recyclerView.adapter = adapter
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 //        presenter.onActivityCreated()
 
+        println("onActivityCreated")
+
         homeViewModel.loadHomePage()
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
         val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
 
         homeViewModel.places.observe(this, Observer {places ->
             progressBar?.visibility = View.GONE
-            adapter.items = places
-            println("adapter : " + adapter.parentCategories.size)
-            recyclerView?.adapter = adapter
+            adapter.updateItems(places)
         })
 
         homeViewModel.categories.observe(this, Observer {categories->
             println(categories.size)
             adapter.parentCategories = categories
         })
-
-
     }
 
     override fun showPlaces(places: List<Place>) {
-
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
         val progressBar = view?.findViewById<ProgressBar>(R.id.loadingBar)
         progressBar?.visibility = View.GONE
-        adapter = ModernHomeAdapter(this)
-        adapter.items = places
+        adapter.updateItems(places)
         recyclerView?.adapter = adapter
-
     }
 
     override fun showCategories(categories: List<ParentCategory>) {
@@ -101,6 +98,11 @@ class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, HomeContrac
             ?.commit()
     }
 
+    override fun onItemSelected(sortType: Int) {
+        homeViewModel.onSortSelected(sortType)
+    }
+
+
     override fun onItemStarred(place: Place) {
 //        presenter.onItemStarred(placeEntity)
         homeViewModel.onItemStarred(place)
@@ -110,5 +112,7 @@ class HomeFragment : DaggerFragment(), OnHomePlaceItemClickListener, HomeContrac
 //        presenter.onDestroyView()
         super.onDestroyView()
     }
+
+
 
 }

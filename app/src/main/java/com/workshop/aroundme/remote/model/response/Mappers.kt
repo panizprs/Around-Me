@@ -12,7 +12,8 @@ fun PlaceDto.toPlaceEntity() = PlaceEntity(
     imageUrl = images?.getOrNull(0)?.image?.card?.url,
     isFavorite = is_liked != null && is_liked,
     placeId = place_id,
-    slug = slug
+    slug = slug,
+    total_views = total_views
 )
 
 
