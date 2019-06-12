@@ -1,7 +1,8 @@
 package com.workshop.aroundme.app.ui.login
 
 import com.workshop.aroundme.data.model.UserEntity
-import com.workshop.aroundme.data.repository.UserRepository
+import com.workshop.aroundme.domain.model.User
+import com.workshop.aroundme.domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -16,7 +17,7 @@ class LoginPresenterTest {
 
         val loginPresenter = LoginPresenter(view, userRepository)
 
-        val user = UserEntity("reza")
+        val user = User("reza")
 
         every { view.getUsernameValue() } returns "iman"
         every { view.getPasswordValue() } returns "1234"
