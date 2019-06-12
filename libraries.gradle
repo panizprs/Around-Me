@@ -14,7 +14,9 @@ ext {
             maps            : "16.0.0"
     ]
     testLibraries = [
-            mockk: "1.9",
-            junit: "4.12"
+            mockk       : "1.9",
+            junit       : "4.12",
+            androidXTest: "1.2.0-beta01",
+            androidJunit: "1.1.1-beta01"
     ]
 }

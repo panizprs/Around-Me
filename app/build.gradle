@@ -63,6 +63,18 @@ dependencies {
 
     testImplementation "junit:junit:$testLibraries.junit"
     testImplementation "io.mockk:mockk:$testLibraries.mockk"
-    androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
+
+    testImplementation "androidx.test:monitor:$testLibraries.androidXTest"
+    testImplementation "androidx.test:runner:$testLibraries.androidXTest"
+    testImplementation "androidx.test:rules:$testLibraries.androidXTest"
+    testImplementation "androidx.test.ext:junit:$testLibraries.androidJunit"
+    testImplementation "androidx.test.ext:truth:$testLibraries.androidXTest"
+    testImplementation "androidx.test:core:$testLibraries.androidXTest"
+
+
+    androidTestImplementation "androidx.test:monitor:$testLibraries.androidXTest"
+    androidTestImplementation "androidx.test:rules:$testLibraries.androidXTest"
+    androidTestImplementation "androidx.test.ext:junit:$testLibraries.androidJunit"
+    androidTestImplementation "androidx.test:runner:$testLibraries.androidXTest"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
 }

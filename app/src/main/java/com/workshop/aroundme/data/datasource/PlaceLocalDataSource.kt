@@ -6,4 +6,6 @@ interface PlaceLocalDataSource{
     fun getStarredPlaces(): List<PlaceEntity>
 
     fun starPlace(placeEntity: PlaceEntity)
+
+    fun clearAllPlaces()
 }

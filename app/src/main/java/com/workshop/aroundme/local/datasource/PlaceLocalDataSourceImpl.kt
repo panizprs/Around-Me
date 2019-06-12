@@ -18,4 +18,9 @@ class PlaceLocalDataSourceImpl(private val placeDao: PlaceDao) :
     override fun starPlace(placeEntity: PlaceEntity) {
         placeDao.insert(placeEntity.toLocalPlace())
     }
+
+    override fun clearAllPlaces() {
+        placeDao.clearAll()
+    }
+
 }
