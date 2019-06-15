@@ -13,4 +13,5 @@
     <string name="defaultSort">پیش فرض</string>
     <string name="LikesCount">تعداد لایک ها</string>
     <string name="totalViews">تعداد بازدید ها</string>
+    <string name="search">جست و جو درباره ی این مکان</string>
 </resources>

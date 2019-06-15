@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.workshop.aroundme.R
-import com.workshop.aroundme.app.ui.detail.viewholder.CoverViewHolder
-import com.workshop.aroundme.app.ui.detail.viewholder.LocationViewHolder
-import com.workshop.aroundme.app.ui.detail.viewholder.PlaceInfoViewHolder
-import com.workshop.aroundme.app.ui.detail.viewholder.TagsViewHolder
+import com.workshop.aroundme.app.ui.detail.viewholder.*
 import com.workshop.aroundme.data.model.PlaceDetail
 
 
@@ -34,6 +31,10 @@ class DetailsAdapter(private val placeDetail: PlaceDetail) :
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail_tags_item, parent, false)
                 return TagsViewHolder(view)
             }
+            ITEM_TYPE_SEARCH ->{
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail_search_button_item, parent, false)
+                return SearchButtonViewHolder(view)
+            }
             else -> {
                 throw Exception("Invalid view type")
             }
@@ -46,11 +47,12 @@ class DetailsAdapter(private val placeDetail: PlaceDetail) :
             1 -> ITEM_TYPE_PLACE_INFO
             2 -> ITEM_TYPE_LOCATION
             3 -> ITEM_TYPE_TAGS
+            4 -> ITEM_TYPE_SEARCH
             else -> throw Exception("Invalid position")
         }
     }
 
-    override fun getItemCount() = 4
+    override fun getItemCount() = 5
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewType = getItemViewType(position)
@@ -59,6 +61,7 @@ class DetailsAdapter(private val placeDetail: PlaceDetail) :
             ITEM_TYPE_PLACE_INFO -> (holder as PlaceInfoViewHolder).bind(placeDetail)
             ITEM_TYPE_LOCATION -> (holder as LocationViewHolder).bind(placeDetail)
             ITEM_TYPE_TAGS -> (holder as TagsViewHolder).bind(placeDetail)
+            ITEM_TYPE_SEARCH -> (holder as SearchButtonViewHolder).bind(placeDetail)
         }
     }
 
@@ -67,6 +70,7 @@ class DetailsAdapter(private val placeDetail: PlaceDetail) :
         const val ITEM_TYPE_PLACE_INFO = 200
         const val ITEM_TYPE_LOCATION = 300
         const val ITEM_TYPE_TAGS = 400
+        const val ITEM_TYPE_SEARCH = 500
     }
 
 }
